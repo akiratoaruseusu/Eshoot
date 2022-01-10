@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class MainMenuManeger : MonoBehaviour {
+public class MainMenuManager : MonoBehaviour {
     public enum MENU_MODE {         // メニュー状態定義
         NOEMAL,                         // 通常
         SWIPE,                          // スワイプ中
@@ -73,6 +73,15 @@ public class MainMenuManeger : MonoBehaviour {
             menuMode = MENU_MODE.SWIPE;
             return;
         }
+
+        // アニメーション
+        var button = Instantiate(stageEnterButton, stageEnterButton.transform.parent);
+        button.GetComponent<Animator>().SetTrigger("prevOut");
+        button.transform.SetAsFirstSibling();
+        Destroy(button, 0.4f);
+        stageEnterButton.GetComponent<Animator>().SetTrigger("prevIn");
+
+
         stageNumber--;
         StageDispRefresh();
     }
@@ -86,6 +95,14 @@ public class MainMenuManeger : MonoBehaviour {
             menuMode = MENU_MODE.SWIPE;
             return;
         }
+
+        // アニメーション
+        var button = Instantiate(stageEnterButton, stageEnterButton.transform.parent);
+        button.GetComponent<Animator>().SetTrigger("nextOut");
+        button.transform.SetAsFirstSibling();
+        Destroy(button, 0.4f);
+        stageEnterButton.GetComponent<Animator>().SetTrigger("nextIn");
+
         stageNumber++;
         StageDispRefresh();
     }
