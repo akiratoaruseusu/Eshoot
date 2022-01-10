@@ -4,7 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class StageSelect : MonoBehaviour {
+public class MainMenuManeger : MonoBehaviour {
+    public enum MENU_MODE {         // メニュー状態定義
+        NOEMAL,                         // 通常
+        STAGE_SELECTED,                 // ステージ選択済み
+    };
+
     private const int MIN_STAGE = 1;    // ステージ数最小
     private const int MAX_STAGE = 10;   // ステージ数最大
 
@@ -18,7 +23,7 @@ public class StageSelect : MonoBehaviour {
 
     public Sprite[] stagePicture = new Sprite[MAX_STAGE]; //ステージ画像
 
-    private bool zoomFlg = false;       // ステージ画像拡大フラグ(決定時)
+    private MENU_MODE menuMode = MENU_MODE.NOEMAL;       // メニュー状態
 
 
     // Start is called before the first frame update
@@ -31,8 +36,13 @@ public class StageSelect : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (zoomFlg && stageEnterButton.GetComponent<RectTransform>().localScale.x < 2.5f)
-            stageEnterButton.GetComponent<RectTransform>().localScale += new Vector3(0.5f / 30.0f, 0.5f / 30.0f, 0.0f);
+        switch (menuMode) {
+        case MENU_MODE.STAGE_SELECTED:
+            // ステージ画像（ボタン）を拡大
+            if (stageEnterButton.GetComponent<RectTransform>().localScale.x < 2.5f)
+                stageEnterButton.GetComponent<RectTransform>().localScale += new Vector3(0.5f / 30.0f, 0.5f / 30.0f, 0.0f);
+            break;
+        }
     }
 
     // 前ステージ選択
@@ -51,7 +61,7 @@ public class StageSelect : MonoBehaviour {
 
     // ステージ決定
     public void StageSelectEnter() {
-        zoomFlg = true;
+        menuMode = MENU_MODE.STAGE_SELECTED;
         StartCoroutine(StageEnterCoroutine());
     }
 

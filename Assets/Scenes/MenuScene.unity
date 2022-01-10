@@ -564,7 +564,7 @@ GameObject:
   - component: {fileID: 855554596}
   - component: {fileID: 855554595}
   m_Layer: 0
-  m_Name: StageSelectManager
+  m_Name: MainMenuManeger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
