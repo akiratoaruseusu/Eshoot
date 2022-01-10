@@ -7,7 +7,13 @@ using UnityEngine.SceneManagement;
 public class MainMenuManeger : MonoBehaviour {
     public enum MENU_MODE {         // メニュー状態定義
         NOEMAL,                         // 通常
+        SWIPE,                          // スワイプ中
         STAGE_SELECTED,                 // ステージ選択済み
+    };
+    public enum SWIPE {             // スワイプ方向定義
+        NONE,                           // なし
+        LEFT,                           // 左
+        RIGHT,                          // 右
     };
 
     private const int MIN_STAGE = 1;    // ステージ数最小
@@ -25,6 +31,9 @@ public class MainMenuManeger : MonoBehaviour {
 
     private MENU_MODE menuMode = MENU_MODE.NOEMAL;       // メニュー状態
 
+    private float pressStartPosX;           // スワイプ判定用:押下開始X座標
+    private float swipeDiffPosX = 10.0f;    // スワイプ判定とする距離
+
 
     // Start is called before the first frame update
     void Start() {
@@ -36,7 +45,17 @@ public class MainMenuManeger : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+
         switch (menuMode) {
+        case MENU_MODE.NOEMAL:
+        case MENU_MODE.SWIPE:
+            // スワイプ判定
+            switch (SwipeCheck()) {
+            case SWIPE.LEFT: StageSelectNext(); break;
+            case SWIPE.RIGHT: StageSelectPrev(); break;
+            }
+            break;
+
         case MENU_MODE.STAGE_SELECTED:
             // ステージ画像（ボタン）を拡大
             if (stageEnterButton.GetComponent<RectTransform>().localScale.x < 2.5f)
@@ -47,20 +66,39 @@ public class MainMenuManeger : MonoBehaviour {
 
     // 前ステージ選択
     public void StageSelectPrev() {
+        // 最初のステージかチェック
         if (MIN_STAGE >= stageNumber) return;
+        // スワイプ優先
+        if (MENU_MODE.SWIPE == menuMode && SWIPE.NONE != SwipeCheck()) {
+            menuMode = MENU_MODE.SWIPE;
+            return;
+        }
         stageNumber--;
         StageDispRefresh();
     }
 
     // 次ステージ選択
     public void StageSelectNext() {
+        // 最後のステージかチェック
         if (System.Math.Min(stageClearNumber + 1, MAX_STAGE) <= stageNumber) return;
+        // スワイプ優先
+        if (MENU_MODE.SWIPE == menuMode && SWIPE.NONE != SwipeCheck()) {
+            menuMode = MENU_MODE.SWIPE;
+            return;
+        }
         stageNumber++;
         StageDispRefresh();
     }
 
     // ステージ決定
     public void StageSelectEnter() {
+        // 選択済みかチェック
+        if (MENU_MODE.STAGE_SELECTED == menuMode) return;
+        // スワイプ優先
+        if (MENU_MODE.SWIPE == menuMode && SWIPE.NONE != SwipeCheck()) {
+            menuMode = MENU_MODE.SWIPE;
+            return;
+        }
         menuMode = MENU_MODE.STAGE_SELECTED;
         StartCoroutine(StageEnterCoroutine());
     }
@@ -100,5 +138,22 @@ public class MainMenuManeger : MonoBehaviour {
         SceneManager.LoadScene("Title");
 
         yield break;
+    }
+
+    // スワイプ判定
+    private SWIPE SwipeCheck() {
+        if (Input.GetMouseButtonDown(0)) {
+            menuMode = MENU_MODE.SWIPE;
+            pressStartPosX = Input.mousePosition.x;
+        }
+        if (Input.GetMouseButtonUp(0)) {
+            menuMode = MENU_MODE.NOEMAL;
+            if (swipeDiffPosX <= pressStartPosX - Input.mousePosition.x) {
+                return SWIPE.LEFT;
+            } else if (swipeDiffPosX <= Input.mousePosition.x - pressStartPosX) {
+                return SWIPE.RIGHT;
+            }
+        }
+        return SWIPE.NONE;
     }
 }
