@@ -18,6 +18,8 @@ public class StageSelect : MonoBehaviour {
 
     public Sprite[] stagePicture = new Sprite[MAX_STAGE]; //ステージ画像
 
+    private bool zoomFlg = false;       // ステージ画像拡大フラグ(決定時)
+
 
     // Start is called before the first frame update
     void Start() {
@@ -29,7 +31,8 @@ public class StageSelect : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        
+        if (zoomFlg && stageEnterButton.GetComponent<RectTransform>().localScale.x < 2.5f)
+            stageEnterButton.GetComponent<RectTransform>().localScale += new Vector3(0.5f / 30.0f, 0.5f / 30.0f, 0.0f);
     }
 
     // 前ステージ選択
@@ -41,13 +44,14 @@ public class StageSelect : MonoBehaviour {
 
     // 次ステージ選択
     public void StageSelectNext() {
-        if (stageClearNumber+1 <= stageNumber) return;
+        if (System.Math.Min(stageClearNumber + 1, MAX_STAGE) <= stageNumber) return;
         stageNumber++;
         StageDispRefresh();
     }
 
     // ステージ決定
     public void StageSelectEnter() {
+        zoomFlg = true;
         StartCoroutine(StageEnterCoroutine());
     }
 
@@ -62,7 +66,7 @@ public class StageSelect : MonoBehaviour {
                 ? new Color(color.r, color.g, color.b, 1.0f)
                 : new Color(color.r, color.g, color.b, 0.0f);
         stageNextButton.GetComponent<Image>().color
-            = stageClearNumber + 1 > stageNumber
+            = System.Math.Min(stageClearNumber + 1, MAX_STAGE) > stageNumber
                 ? new Color(color.r, color.g, color.b, 1.0f)
                 : new Color(color.r, color.g, color.b, 0.0f);
 
