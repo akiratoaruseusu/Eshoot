@@ -123,19 +123,10 @@ public class MainMenuManager : MonoBehaviour {
     // 選択ステージ描画更新
     private void StageDispRefresh() {
         // 前・次ボタンが不要なときボタンを非表示にする
-        // LayoutGroupが崩れるので無効化はしない
-        // todo:もっと上手くアルファ値だけ変える方法があればそれに変更する
-        var color = stagePrevButton.GetComponent<Image>().color;
-        stagePrevButton.GetComponent<Image>().color
-            = MIN_STAGE < stageNumber
-                ? new Color(color.r, color.g, color.b, 1.0f)
-                : new Color(color.r, color.g, color.b, 0.0f);
-        stageNextButton.GetComponent<Image>().color
-            = System.Math.Min(stageClearNumber + 1, MAX_STAGE) > stageNumber
-                ? new Color(color.r, color.g, color.b, 1.0f)
-                : new Color(color.r, color.g, color.b, 0.0f);
+        stagePrevButton.SetActive(MIN_STAGE < stageNumber ? true : false);
+        stageNextButton.SetActive(System.Math.Min(stageClearNumber + 1, MAX_STAGE) > stageNumber ? true : false);
 
-        // ステージNo.テキストを更新
+        // ステージ名を表示
         stageNumberText.GetComponent<Text>().text = "Stage " + stageNumber.ToString("D2");
 
         // ステージ画像を更新
