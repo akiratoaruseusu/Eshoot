@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private Slider hpBar;
 
     private Rigidbody rb;
+    private PlayerAttack playerAttack;
 
     private float movementX;
     private float movementY;
@@ -32,12 +33,16 @@ public class PlayerController : MonoBehaviour
         // プレイヤーにアタッチされているRigidbodyを取得
         rb = gameObject.GetComponent<Rigidbody>();
 
+        // プレイヤーの攻撃処理を取得
+        playerAttack = gameObject.GetComponent<PlayerAttack>();
+
         // プレイヤーのHPをHPバーに反映
         HpUpdate();
     }
 
     private void OnAttack() {
         Debug.Log("OnAttack");
+        playerAttack.ShootBullet();
     }
 
     private void OnCapture() {
@@ -57,7 +62,7 @@ public class PlayerController : MonoBehaviour
         // 入力値を元に3軸ベクトルを作成
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
-        // rigidbodyのAddForceを使用してプレイヤーを動かす。
+        // rigidbodyのAddForceを使用してプレイヤーを動かす
         rb.AddForce(movement * speed);
     }
 
