@@ -49,6 +49,13 @@ public class PlayerController : MonoBehaviour
         Debug.Log("OnCapture");
     }
 
+    private void OnTriggerEnter(Collider collider) {
+        Debug.Log("OnTriggerEnter");
+        if (collider.CompareTag("Goal")) {
+            Debug.Log("Goal!!");
+        }
+    }
+
     private void OnMove(InputValue movementValue) {
         // Moveアクションの入力値を取得
         Vector2 movementVector = movementValue.Get<Vector2>();
