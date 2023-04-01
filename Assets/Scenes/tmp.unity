@@ -921,6 +921,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI_Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 7403425449236304035, guid: ea6c96ae406253040a3f801717dde865,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7403425449236304035, guid: ea6c96ae406253040a3f801717dde865,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7403425449236304035, guid: ea6c96ae406253040a3f801717dde865,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 9152451814853998248, guid: ea6c96ae406253040a3f801717dde865,
         type: 3}
       propertyPath: m_AnchorMax.x
