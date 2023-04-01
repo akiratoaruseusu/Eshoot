@@ -143,7 +143,7 @@ public class MainMenuManager : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
 
         //todo:ゲームステージへ遷移するように変更する
-        SceneManager.LoadScene("Title");
+        SceneManager.LoadScene("tmp");
 
         yield break;
     }
