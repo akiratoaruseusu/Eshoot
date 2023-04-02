@@ -7,24 +7,34 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    [Tooltip("プレイヤーの最大HP")]
+    [Tooltip("最大HP")]
     private int hpMax = 100;
     [SerializeField]
-    [Tooltip("プレイヤーの現在HP")]
+    [Tooltip("現在HP")]
     private int hp = 100;
     [SerializeField]
-    [Tooltip("プレイヤーの攻撃力")]
+    [Tooltip("攻撃力")]
     private int atk = 5;
     [SerializeField]
-    [Tooltip("プレイヤーの移動速度")]
-    private float speed = 10;
+    [Tooltip("移動速度")]
+    private float moveSpeed = 10;
 
     [SerializeField]
-    [Tooltip("プレイヤーのHPバー")]
+    [Tooltip("ノックバック力")]
+    private float knockbackForce = 1f;
+    [SerializeField]
+    [Tooltip("衝突時停止時間")]
+    private float stopTime = 1f;
+
+    [SerializeField]
+    [Tooltip("HPバー")]
     private Slider hpBar;
 
     private Rigidbody rb;
     private PlayerAttack playerAttack;
+
+    private bool isMovingForward;  // 前進フラグ
+    private float forwardSpeed;  // 前進速度
 
     private float movementX;
     private float movementY;
@@ -33,6 +43,9 @@ public class PlayerController : MonoBehaviour
     public static event StageClear OnStageClear;
 
     void Start() {
+        // ステージマネージャーから移動開始を受け取る
+        StageManager.OnPlayerMoveStart += OnPlayerMoveStart;
+
         // プレイヤーにアタッチされているRigidbodyを取得
         rb = gameObject.GetComponent<Rigidbody>();
 
@@ -59,6 +72,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision other) {
+        if (other.gameObject.CompareTag("Enemy")) {
+            Debug.Log("敵とぶつかった");
+            // ノックバック方向の計算
+            Vector3 knockbackDirection = Vector3.Reflect(transform.forward, other.contacts[0].normal);
+
+            // ノックバック力の加算
+            rb.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
+
+            StopMoving();
+            Invoke("RestartMoving", stopTime);
+
+        }
+    }
+
     private void OnMove(InputValue movementValue) {
         // Moveアクションの入力値を取得
         Vector2 movementVector = movementValue.Get<Vector2>();
@@ -68,12 +96,42 @@ public class PlayerController : MonoBehaviour
         movementY = movementVector.y;
     }
 
+    // プレイヤー自動移動
+    public void OnPlayerMoveStart() {
+        Debug.Log("Start!!");
+        RestartMoving();
+    }
+
+    // プレイヤー前進
+    private void MoveForward() {
+        if (isMovingForward) {
+            // 一定速度で前進する
+            Vector3 movement = new Vector3(0.0f, 0.0f, forwardSpeed);
+            rb.AddForce(movement, ForceMode.VelocityChange);
+        }
+    }
+
+    // 前進を停止する
+    private void StopMoving() {
+        isMovingForward = false;
+        forwardSpeed = 0f;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    // 前進を再開する
+    private void RestartMoving() {
+        isMovingForward = true;
+        forwardSpeed = moveSpeed;
+        MoveForward();
+    }
+
     private void FixedUpdate() {
         // 入力値を元に3軸ベクトルを作成
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
         // rigidbodyのAddForceを使用してプレイヤーを動かす
-        rb.AddForce(movement * speed);
+        rb.AddForce(movement * moveSpeed);
     }
 
     // HPバーを更新
