@@ -39,7 +39,7 @@ public class MainMenuManager : MonoBehaviour {
     void Start() {
         // クリアステージNo.をロード
         stageClearNumber = PlayerPrefs.GetInt("CLEAR_STAGE_NO", 0);
-        stageNumber = stageClearNumber+1;
+        stageNumber = System.Math.Min(stageClearNumber + 1, MAX_STAGE);
         StageDispRefresh();
     }
 
