@@ -8,8 +8,8 @@ public class EnemyPopArea : MonoBehaviour {
     private GameObject enemy;
 
     // エリア内にプレイヤーが入ったら敵が出現
-    private void OnTriggerEnter(Collider collider) {
-        if (collider.CompareTag("Player")) {
+    private void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Player")) {
             EnemyPop();
         }
     }

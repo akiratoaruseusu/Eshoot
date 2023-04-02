@@ -7,6 +7,9 @@ public class PlayerAttack : MonoBehaviour {
     [Tooltip("’e")]
     private GameObject bullet;
     [SerializeField]
+    [Tooltip("’e‚ÌUŒ‚—Í")]
+    private int atk = 20;
+    [SerializeField]
     [Tooltip("’e‚Ì‘¬‚³")]
     private float speed = 30f;
     [SerializeField]
@@ -28,6 +31,7 @@ public class PlayerAttack : MonoBehaviour {
 
         // ’e‚Ì”­Ë
         obj.GetComponent<Rigidbody>().AddForce(movement);
+        obj.GetComponent<Bullet>().pow = atk;
 
         Destroy(obj, time);
     }

@@ -49,9 +49,9 @@ public class PlayerController : MonoBehaviour
         Debug.Log("OnCapture");
     }
 
-    private void OnTriggerEnter(Collider collider) {
+    private void OnTriggerEnter(Collider other) {
         Debug.Log("OnTriggerEnter");
-        if (collider.CompareTag("Goal")) {
+        if (other.CompareTag("Goal")) {
             Debug.Log("Goal!!");
         }
     }

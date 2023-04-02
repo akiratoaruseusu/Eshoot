@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: New Enemy Data
   m_EditorClassIdentifier: 
   enemyName: "\u30C6\u30B9\u30C8\u3055\u3093"
-  maxHp: 10
+  maxHp: 50
   atk: 1
   def: 0
   exp: 1
