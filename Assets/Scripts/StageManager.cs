@@ -9,8 +9,11 @@ public class StageManager : MonoBehaviour {
     [Tooltip("画面上に表示するメッセージのパネル")]
     private GameObject MessagePanel;
 
-    public delegate void PlayerMoveStart();
-    public static event PlayerMoveStart OnPlayerMoveStart;
+    [SerializeField]
+    [Tooltip("プレイヤー")]
+    private GameObject Player;
+
+    private bool startFlg = true;
 
     // Start is called before the first frame update
     void Start() {
@@ -19,13 +22,15 @@ public class StageManager : MonoBehaviour {
         // ポーズ画面からステージ終了
         Pause.OnStageExit += OnStageExit;
 
-        StartCoroutine(CountDownToStart());
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(startFlg){
+            StartCoroutine(CountDownToStart());
+            startFlg = false;
+        }
     }
 
     public void OnStageClear() {
@@ -52,6 +57,6 @@ public class StageManager : MonoBehaviour {
         MessagePanel.SetActive(false);
 
         // プレイヤー自動移動開始
-        OnPlayerMoveStart?.Invoke();
+        Player.GetComponent<PlayerController>().MoveStart();
     }
 }

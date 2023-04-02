@@ -43,9 +43,6 @@ public class PlayerController : MonoBehaviour
     public static event StageClear OnStageClear;
 
     void Start() {
-        // ステージマネージャーから移動開始を受け取る
-        StageManager.OnPlayerMoveStart += OnPlayerMoveStart;
-
         // プレイヤーにアタッチされているRigidbodyを取得
         rb = gameObject.GetComponent<Rigidbody>();
 
@@ -97,7 +94,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // プレイヤー自動移動
-    public void OnPlayerMoveStart() {
+    public void MoveStart() {
         Debug.Log("Start!!");
         RestartMoving();
     }
