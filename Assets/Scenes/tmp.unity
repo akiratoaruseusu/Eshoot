@@ -836,6 +836,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4583347064241510965, guid: 327ae43d9c4ef0f45b2aca69d992bdeb,
         type: 3}
+      propertyPath: Player
+      value: 
+      objectReference: {fileID: 583404883}
+    - target: {fileID: 4583347064241510965, guid: 327ae43d9c4ef0f45b2aca69d992bdeb,
+        type: 3}
       propertyPath: MessagePanel
       value: 
       objectReference: {fileID: 1851028099}
