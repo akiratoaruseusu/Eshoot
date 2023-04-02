@@ -29,6 +29,9 @@ public class PlayerController : MonoBehaviour
     private float movementX;
     private float movementY;
 
+    public delegate void StageClear();
+    public static event StageClear OnStageClear;
+
     void Start() {
         // プレイヤーにアタッチされているRigidbodyを取得
         rb = gameObject.GetComponent<Rigidbody>();
@@ -52,7 +55,7 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         Debug.Log("OnTriggerEnter");
         if (other.CompareTag("Goal")) {
-            Debug.Log("Goal!!");
+            OnStageClear?.Invoke();
         }
     }
 

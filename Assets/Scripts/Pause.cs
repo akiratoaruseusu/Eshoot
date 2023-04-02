@@ -1,9 +1,10 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Pause : MonoBehaviour
 {
     public GameObject pausePanel;
+    public delegate void StageExit();
+    public static event StageExit OnStageExit;
 
     public void PauseGame() {
         // ポーズ画面表示
@@ -28,7 +29,7 @@ public class Pause : MonoBehaviour
         // 一時停止解除
         Time.timeScale = 1;
 
-        // メニューに戻る
-        SceneManager.LoadScene("MenuScene");
+        // ステージ選択メニューに戻る
+        OnStageExit?.Invoke();
     }
 }
