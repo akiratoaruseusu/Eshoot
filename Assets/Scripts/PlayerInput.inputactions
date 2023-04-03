@@ -271,7 +271,7 @@
                     "name": "",
                     "id": "956f133e-4ede-4a28-a342-1e6bbe9451d5",
                     "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Attack",

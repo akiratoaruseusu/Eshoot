@@ -53,17 +53,26 @@ public class PlayerController : MonoBehaviour
         HpUpdate();
     }
 
-    private void OnAttack() {
-        Debug.Log("OnAttack");
-        playerAttack.ShootBullet();
+    public void OnAttack(InputAction.CallbackContext context) {
+        switch (context.phase) {
+        case InputActionPhase.Started:
+            // ボタンが押された時の処理
+            playerAttack.ShootBullet(true);
+            break;
+        
+        case InputActionPhase.Canceled:
+            // ボタンが離された時の処理
+            playerAttack.ShootBullet(false);
+            break;
+        }
+    
     }
 
-    private void OnCapture() {
+    public void OnCapture() {
         Debug.Log("OnCapture");
     }
 
     private void OnTriggerEnter(Collider other) {
-        Debug.Log("OnTriggerEnter");
         if (other.CompareTag("Goal")) {
             OnStageClear?.Invoke();
         }
@@ -84,9 +93,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnMove(InputValue movementValue) {
+    public void OnMove(InputAction.CallbackContext context) {
         // Moveアクションの入力値を取得
-        Vector2 movementVector = movementValue.Get<Vector2>();
+        Vector2 movementVector = context.ReadValue<Vector2>();
 
         // x,y軸方向の入力値を変数に代入
         movementX = movementVector.x;
