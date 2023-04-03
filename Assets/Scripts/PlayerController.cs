@@ -39,8 +39,17 @@ public class PlayerController : MonoBehaviour
     private float movementX;
     private float movementY;
 
+    private Gamepad gamepad;
+    private bool isPressedA = false;
+
     public delegate void StageClear();
     public static event StageClear OnStageClear;
+
+
+    private void Awake() {
+        // PlayerInputのGamepadを取得する
+        gamepad = InputSystem.GetDevice<Gamepad>();
+    }
 
     void Start() {
         // プレイヤーにアタッチされているRigidbodyを取得
@@ -53,19 +62,25 @@ public class PlayerController : MonoBehaviour
         HpUpdate();
     }
 
-    public void OnAttack(InputAction.CallbackContext context) {
-        switch (context.phase) {
-        case InputActionPhase.Started:
-            // ボタンが押された時の処理
-            playerAttack.ShootBullet(true);
-            break;
-        
-        case InputActionPhase.Canceled:
-            // ボタンが離された時の処理
-            playerAttack.ShootBullet(false);
-            break;
+    private void Update() {
+        // Aボタン押下中判定
+        if (null != gamepad && gamepad.buttonEast.isPressed) {
+            if(!isPressedA) {
+                // ボタンが押された時の処理
+                playerAttack.ShootBullet(true);
+                isPressedA = true;
+            }
+        } else {
+            if (isPressedA) {
+                // ボタンが離された時の処理
+                playerAttack.ShootBullet(false);;
+                isPressedA = false;
+            }
         }
-    
+    }
+
+    public void OnAttack(InputAction.CallbackContext context) {
+        // Updateへ処理移動
     }
 
     public void OnCapture() {
