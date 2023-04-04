@@ -64,7 +64,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update() {
         // Aボタン押下中判定
-        if (null != gamepad && gamepad.buttonEast.isPressed) {
+        if (null == gamepad) {
+            // PlayerInputのGamepadを取得する
+            gamepad = InputSystem.GetDevice<Gamepad>();
+        }
+        if (gamepad.buttonEast.isPressed) {
             if(!isPressedA) {
                 // ボタンが押された時の処理
                 playerAttack.ShootBullet(true);
@@ -73,7 +77,7 @@ public class PlayerController : MonoBehaviour
         } else {
             if (isPressedA) {
                 // ボタンが離された時の処理
-                playerAttack.ShootBullet(false);;
+                playerAttack.ShootBullet(false);
                 isPressedA = false;
             }
         }

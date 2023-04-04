@@ -298,10 +298,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 260111478128204789, guid: bba400a7a82405b4a917f92984fc957a, type: 3}
   atk: 20
-  speed: 30
+  speed: 100
   delayTime: 0.25
   lifeTime: 1
-  posZ: 0.25
+  posZ: 0.5
 --- !u!114 &583404890
 MonoBehaviour:
   m_ObjectHideFlags: 0
