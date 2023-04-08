@@ -60,12 +60,12 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Update() {
-        // Aボタン押下中判定
         if (null == gamepad) {
             // PlayerInputのGamepadを取得する
             gamepad = InputSystem.GetDevice<Gamepad>();
         }
 
+        // Aボタン押下中判定
         if (gamepad.buttonEast.isPressed) {
             if(!isPressedA) {
                 // ボタンが押された時の処理
@@ -78,6 +78,20 @@ public class PlayerController : MonoBehaviour
                 playerAttack.ShootBullet(false);
                 isPressedA = false;
             }
+        }
+    }
+
+    private void FixedUpdate() {
+        if (null == gamepad) {
+            // PlayerInputのGamepadを取得する
+            gamepad = InputSystem.GetDevice<Gamepad>();
+        }
+
+        // 前進中なら、入力値で位置を補正
+        if (isMovingForward){
+            Vector3 movement = new Vector3(gamepad.leftStick.ReadValue().x, 0.0f, gamepad.leftStick.ReadValue().y);
+            transform.position += movement * 0.1f;
+
         }
     }
 
@@ -96,7 +110,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other) {
-        if (other.gameObject.CompareTag("Enemy")) {
+        if (other.gameObject.CompareTag("Enemy") && isMovingForward) {
             // ノックバック方向の計算
             Vector3 knockbackDirection = Vector3.Reflect(transform.forward, other.contacts[0].normal);
 
@@ -105,7 +119,6 @@ public class PlayerController : MonoBehaviour
 
             StopMoving();
             Invoke("RestartMoving", stopTime);
-
         }
     }
 
@@ -123,7 +136,6 @@ public class PlayerController : MonoBehaviour
         if (isMovingForward) {
             // 一定速度で前進する
             rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
             Vector3 movement = new Vector3(0.0f, 0.0f, forwardSpeed);
             rb.AddForce(movement, ForceMode.VelocityChange);
         }
@@ -134,7 +146,6 @@ public class PlayerController : MonoBehaviour
         isMovingForward = false;
         forwardSpeed = 0f;
         rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
     }
 
     // 前進を再開する
@@ -142,13 +153,6 @@ public class PlayerController : MonoBehaviour
         isMovingForward = true;
         forwardSpeed = moveSpeed;
         MoveForward();
-    }
-
-    private void FixedUpdate() {
-        // 入力値を元に3軸ベクトルを作成
-        Vector3 movement = new Vector3(gamepad.leftStick.ReadValue().x, 0.0f, gamepad.leftStick.ReadValue().y);
-
-        transform.position += movement * 0.1f;
     }
 
     // HPバーを更新
