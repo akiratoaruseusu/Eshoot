@@ -28,6 +28,7 @@ public class StageManager : MonoBehaviour {
     void Update()
     {
         if(startFlg){
+            Player.transform.position = gameObject.transform.Find("StartPoint").transform.position;
             StartCoroutine(CountDownToStart());
             startFlg = false;
         }
