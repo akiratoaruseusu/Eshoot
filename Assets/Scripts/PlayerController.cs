@@ -97,7 +97,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Enemy")) {
-            Debug.Log("敵とぶつかった");
             // ノックバック方向の計算
             Vector3 knockbackDirection = Vector3.Reflect(transform.forward, other.contacts[0].normal);
 
@@ -116,7 +115,6 @@ public class PlayerController : MonoBehaviour
 
     // プレイヤー自動移動
     public void MoveStart() {
-        Debug.Log("Start!!");
         RestartMoving();
     }
 
@@ -124,6 +122,8 @@ public class PlayerController : MonoBehaviour
     private void MoveForward() {
         if (isMovingForward) {
             // 一定速度で前進する
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             Vector3 movement = new Vector3(0.0f, 0.0f, forwardSpeed);
             rb.AddForce(movement, ForceMode.VelocityChange);
         }
