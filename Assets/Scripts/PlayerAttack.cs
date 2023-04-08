@@ -25,6 +25,10 @@ public class PlayerAttack : MonoBehaviour {
     private bool isFire = false;        // 発射
     private Timer timer;
 
+    [SerializeField]
+    [Tooltip("捕獲ハンド")]
+    private GameObject capture;
+
     private void Start() {
         // タイマーを初期化
         timer = new Timer(delayTime * 1000);
@@ -51,6 +55,22 @@ public class PlayerAttack : MonoBehaviour {
             }
             timer.Enabled = true;
         }
+    }
+
+    public void Capture(float _speed) {
+        // 捕獲ハンドの位置
+        Vector3 pos = new Vector3(transform.position.x, transform.position.y, transform.position.z + posZ*5);
+        // 捕獲ハンドの回転　なし
+        Quaternion rot = new Quaternion();
+        // 捕獲ハンドオブジェクトを生成
+        GameObject obj = Instantiate(capture, pos, rot);
+        // 捕獲ハンドの移動力
+        Vector3 movement = new Vector3(0.0f, 0.0f, _speed);
+
+        // 捕獲ハンドの発射
+        obj.GetComponent<Rigidbody>().AddForce(movement*50);
+
+        Destroy(obj, lifeTime);
     }
 
     private void OnTimerElapsed(object sender, ElapsedEventArgs e) {

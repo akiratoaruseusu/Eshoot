@@ -30,6 +30,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     [Tooltip("HPバー")]
     private Slider hpBar;
+    [SerializeField]
+    [Tooltip("装備時間バー")]
+    private Slider eqTimeBar;
+
+    private float eqTime;             // 装備時間
+    private float eqTimeRemaining;    // 残り装備時間
 
     private Rigidbody rb;
     private PlayerAttack playerAttack;
@@ -82,6 +88,11 @@ public class PlayerController : MonoBehaviour
                 isPressedA = false;
             }
         }
+
+        // Bボタン押下判定
+        if (gamepad.buttonSouth.wasPressedThisFrame) {
+            playerAttack.Capture(moveSpeed);
+        }
     }
 
     private void FixedUpdate() {
@@ -103,7 +114,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void OnCapture() {
-        Debug.Log("OnCapture");
+        // Updateへ処理移動
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -133,6 +144,11 @@ public class PlayerController : MonoBehaviour
         if (0 >= hpCurrent) {
             OnStageFailure?.Invoke();
         }
+    }
+
+    public void Capture(EnemyData data) {
+        eqTime = eqTimeRemaining = data.eqTime;
+        EqTimeUpdate();
     }
 
     public void OnMove(InputAction.CallbackContext context) {
@@ -172,5 +188,11 @@ public class PlayerController : MonoBehaviour
     public void HpUpdate(){
         hpBar.value = (float)hpCurrent / (float)hpMax;
         hpBar.GetComponentInChildren<Text>().text = "HP " + hpCurrent + "/" + hpMax;
+    }
+
+    // 装備時間バーを更新
+    public void EqTimeUpdate() {
+        eqTimeBar.value = (float)eqTimeRemaining / (float)eqTime;
+        eqTimeBar.GetComponentInChildren<Text>().text = "E " + eqTimeRemaining.ToString("F1") + "sec";
     }
 }

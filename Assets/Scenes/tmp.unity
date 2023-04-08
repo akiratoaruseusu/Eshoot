@@ -278,12 +278,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpMax: 100
-  hp: 100
+  hpCurrent: 100
   atk: 5
   moveSpeed: 10
   knockbackForce: 2
   stopTime: 0.5
   hpBar: {fileID: 703417695}
+  eqTimeBar: {fileID: 1200880130}
 --- !u!114 &583404889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,11 +298,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 260111478128204789, guid: bba400a7a82405b4a917f92984fc957a, type: 3}
-  atk: 20
   speed: 1000
   delayTime: 0.25
   lifeTime: 1
   posZ: 0.5
+  capture: {fileID: 6816702172434212770, guid: ec4d31629c17c0e47884b1e862521d88, type: 3}
 --- !u!114 &583404890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,6 +519,18 @@ LightingSettings:
   m_PVRFilteringAtrousPositionSigmaDirect: 0.5
   m_PVRFilteringAtrousPositionSigmaIndirect: 2
   m_PVRFilteringAtrousPositionSigmaAO: 1
+--- !u!114 &1200880130 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 223682351487617526, guid: bde4a40eea9914746aafe96f51c07dce,
+    type: 3}
+  m_PrefabInstance: {fileID: 1773647330}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1201548000 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5365278499179712326, guid: 327ae43d9c4ef0f45b2aca69d992bdeb,

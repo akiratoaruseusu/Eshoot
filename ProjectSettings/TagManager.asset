@@ -9,6 +9,7 @@ TagManager:
   - PlayerBullet
   - Enemy
   - PopPoint
+  - Capture
   layers:
   - Default
   - TransparentFX
