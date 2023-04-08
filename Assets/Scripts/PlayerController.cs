@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
         if (gamepad.buttonEast.isPressed) {
             if(!isPressedA) {
                 // ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Ìˆ—
-                playerAttack.ShootBullet(true);
+                playerAttack.ShootBullet(true, atk);
                 isPressedA = true;
             }
         } else {

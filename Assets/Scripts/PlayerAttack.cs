@@ -8,9 +8,6 @@ public class PlayerAttack : MonoBehaviour {
     [Tooltip("’e")]
     private GameObject bullet;
     [SerializeField]
-    [Tooltip("’e‚ÌUŒ‚—Í")]
-    private int atk = 20;
-    [SerializeField]
     [Tooltip("’e‚Ì‘¬‚³")]
     private float speed = 30f;
     [SerializeField]
@@ -23,6 +20,7 @@ public class PlayerAttack : MonoBehaviour {
     [Tooltip("’e‚ÌˆÊ’u(Z) ©‹@‚©‚ç‚Ç‚ê‚¾‚¯‘O‚Éo‚·‚©")]
     private float posZ = 0.25f;
 
+    private int atk = 20;               // ’e‚ÌUŒ‚—Í
     private bool isShooting = false;    // ”­Ë’†(’·‰Ÿ‚µ‚ÌŠÔ)
     private bool isFire = false;        // ”­Ë
     private Timer timer;
@@ -40,8 +38,9 @@ public class PlayerAttack : MonoBehaviour {
         }
     }
 
-    public void ShootBullet(bool _isShooting) {
+    public void ShootBullet(bool _isShooting, int _atk = 0) {
         isShooting = _isShooting;
+        atk = _atk;
         Debug.Log("isShooting:"+isShooting);
 
         // ƒ{ƒ^ƒ“‰Ÿ‰ºŠJn‚µ‚½‚ç”­Ë’†ó‘Ô‚É‚·‚é
