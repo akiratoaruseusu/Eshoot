@@ -82,7 +82,6 @@ public class PlayerController : MonoBehaviour
                 isPressedA = false;
             }
         }
-        Debug.Log("padX:"+gamepad.leftStick.ReadValue().x + " padY:"+ gamepad.leftStick.ReadValue().y);
     }
 
     public void OnAttack(InputAction.CallbackContext context) {
@@ -115,12 +114,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void OnMove(InputAction.CallbackContext context) {
-        //// Moveアクションの入力値を取得
-        //Vector2 movementVector = context.ReadValue<Vector2>();
-        //
-        //// x,y軸方向の入力値を変数に代入
-        //movementX = movementVector.x;
-        //movementY = movementVector.y;
+        // FixedUpdateへ処理移動
     }
 
     // プレイヤー自動移動
@@ -156,10 +150,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate() {
         // 入力値を元に3軸ベクトルを作成
         Vector3 movement = new Vector3(gamepad.leftStick.ReadValue().x, 0.0f, gamepad.leftStick.ReadValue().y);
-        //Debug.Log("X:"+movementX+" Y:"+movementY );
 
-        // rigidbodyのAddForceを使用してプレイヤーを動かす
-        //rb.AddForce(movement * moveSpeed);
         transform.position += movement * 0.1f;
     }
 
