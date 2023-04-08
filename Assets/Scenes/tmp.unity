@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -282,7 +282,7 @@ MonoBehaviour:
   atk: 5
   moveSpeed: 10
   knockbackForce: 2
-  stopTime: 1
+  stopTime: 0.5
   hpBar: {fileID: 703417695}
 --- !u!114 &583404889
 MonoBehaviour:
@@ -298,7 +298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 260111478128204789, guid: bba400a7a82405b4a917f92984fc957a, type: 3}
   atk: 20
-  speed: 1000
+  speed: 10
   delayTime: 0.25
   lifeTime: 1
   posZ: 0.5
