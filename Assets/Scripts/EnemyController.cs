@@ -5,11 +5,11 @@ using System;
 
 public class EnemyController : MonoBehaviour {
     public EnemyData enemyData;
-    private int hp;
+    private int hpCurrent;
 
     // Start is called before the first frame update
     void Start(){
-        hp = enemyData.maxHp;
+        hpCurrent = enemyData.maxHp;
     }
 
     // Update is called once per frame
@@ -29,9 +29,9 @@ public class EnemyController : MonoBehaviour {
     // ダメージ
     private　void Damage(int damage){
         // 防御力を引いた分HPを減らす
-        hp -= Math.Max(damage - enemyData.def, 0);
-        Debug.Log("ENEMY HP:" + hp);
-        if(0 >= hp){
+        hpCurrent -= Math.Max(damage - enemyData.def, 0);
+        Debug.Log("ENEMY HP:" + hpCurrent);
+        if(0 >= hpCurrent) {
             Destroy(gameObject);
         }
     }

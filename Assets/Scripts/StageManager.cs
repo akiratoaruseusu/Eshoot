@@ -19,6 +19,8 @@ public class StageManager : MonoBehaviour {
     void Start() {
         // プレイヤーがゴールしたらステージクリア
         PlayerController.OnStageClear += OnStageClear;
+        // プレイヤーがHP0になったらステージ失敗
+        PlayerController.OnStageFailure += OnStageFailure;
         // ポーズ画面からステージ終了
         Pause.OnStageExit += OnStageExit;
 
@@ -35,6 +37,11 @@ public class StageManager : MonoBehaviour {
     }
 
     public void OnStageClear() {
+        // ステージ選択画面に戻る
+        SceneManager.LoadScene("MenuScene");
+    }
+
+    public void OnStageFailure() {
         // ステージ選択画面に戻る
         SceneManager.LoadScene("MenuScene");
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class PlayerController : MonoBehaviour
     private int hpMax = 100;
     [SerializeField]
     [Tooltip("現在HP")]
-    private int hp = 100;
+    private int hpCurrent = 100;
     [SerializeField]
     [Tooltip("攻撃力")]
     private int atk = 5;
@@ -39,8 +40,10 @@ public class PlayerController : MonoBehaviour
     private Gamepad gamepad;
     private bool isPressedA = false;
 
+    // イベント
     public delegate void StageClear();
     public static event StageClear OnStageClear;
+    public static event StageClear OnStageFailure;
 
 
     private void Awake() {
@@ -111,14 +114,24 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Enemy") && isMovingForward) {
-            // ノックバック方向の計算
+            // ノックバック
             Vector3 knockbackDirection = Vector3.Reflect(transform.forward, other.contacts[0].normal);
-
-            // ノックバック力の加算
             rb.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
-
             StopMoving();
             Invoke("RestartMoving", stopTime);
+
+            // ダメージ
+            Damage(other.gameObject.GetComponent<EnemyController>().enemyData.atk);
+            HpUpdate();
+        }
+    }
+
+    // ダメージ
+    private void Damage(int damage) {
+        // 防御力を引いた分HPを減らす
+        hpCurrent -= Math.Max(damage, 0);
+        if (0 >= hpCurrent) {
+            OnStageFailure?.Invoke();
         }
     }
 
@@ -157,6 +170,7 @@ public class PlayerController : MonoBehaviour
 
     // HPバーを更新
     public void HpUpdate(){
-        hpBar.value = (float)hp / (float)hpMax;
+        hpBar.value = (float)hpCurrent / (float)hpMax;
+        hpBar.GetComponentInChildren<Text>().text = "HP " + hpCurrent + "/" + hpMax;
     }
 }
