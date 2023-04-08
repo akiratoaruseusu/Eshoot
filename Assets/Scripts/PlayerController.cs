@@ -36,9 +36,6 @@ public class PlayerController : MonoBehaviour
     private bool isMovingForward;  // 前進フラグ
     private float forwardSpeed;  // 前進速度
 
-    private float movementX;
-    private float movementY;
-
     private Gamepad gamepad;
     private bool isPressedA = false;
 
