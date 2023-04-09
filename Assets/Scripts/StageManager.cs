@@ -15,15 +15,18 @@ public class StageManager : MonoBehaviour {
 
     private bool startFlg = true;
 
+    static bool eventSetFlg = true;
     // Start is called before the first frame update
     void Start() {
-        // プレイヤーがゴールしたらステージクリア
-        PlayerController.OnStageClear += OnStageClear;
-        // プレイヤーがHP0になったらステージ失敗
-        PlayerController.OnStageFailure += OnStageFailure;
-        // ポーズ画面からステージ終了
-        Pause.OnStageExit += OnStageExit;
-
+        if (eventSetFlg) {
+            eventSetFlg = false;
+            // プレイヤーがゴールしたらステージクリア
+            PlayerController.OnStageClear += OnStageClear;
+            // プレイヤーがHP0になったらステージ失敗
+            PlayerController.OnStageFailure += OnStageFailure;
+            // ポーズ画面からステージ終了
+            Pause.OnStageExit += OnStageExit;
+        }
     }
 
     // Update is called once per frame
@@ -37,6 +40,9 @@ public class StageManager : MonoBehaviour {
     }
 
     public void OnStageClear() {
+        // ステージクリアフラグ
+        PlayerPrefs.SetInt("PLAY_STAGE_NO", PlayerPrefs.GetInt("PLAY_STAGE_NO", 0) + MainMenuManager.STAGE_CLEAR_FLG);
+
         // ステージ選択画面に戻る
         SceneManager.LoadScene("MenuScene");
     }
