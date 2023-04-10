@@ -18,6 +18,7 @@ public class MainMenuManager : MonoBehaviour {
 
     private const int MIN_STAGE = 1;    // ステージ数最小
     private const int MAX_STAGE = 10;   // ステージ数最大
+    public const int STAGE_CLEAR_FLG = 10000;   //ステージクリアフラグ（ステージNoに加算）
 
     public int stageNumber = 1;         // 選択中ステージNo.
     private int stageClearNumber;       // クリア済みステージ数
@@ -39,7 +40,24 @@ public class MainMenuManager : MonoBehaviour {
     void Start() {
         // クリアステージNo.をロード
         stageClearNumber = PlayerPrefs.GetInt("CLEAR_STAGE_NO", 0);
-        stageNumber = stageClearNumber+1;
+
+        // プレイ中ステージNo.をロード
+        stageNumber = PlayerPrefs.GetInt("PLAY_STAGE_NO", 0);
+        int clearCheck = stageNumber / STAGE_CLEAR_FLG;
+        stageNumber %= STAGE_CLEAR_FLG;
+
+        // クリア済みならクリアステージを更新
+        if (1 == clearCheck && stageClearNumber < stageNumber) {
+            PlayerPrefs.SetInt("CLEAR_STAGE_NO", stageNumber);
+            stageClearNumber = stageNumber;
+            Debug.Log("クリアステージ更新:"+ stageClearNumber);
+        }
+
+        // プレイ中ステージNo.をリセット
+        PlayerPrefs.SetInt("PLAY_STAGE_NO", 0);
+
+        // デフォルト選択ステージはクリア済み＋1とする
+        stageNumber = System.Math.Min(stageClearNumber + 1, MAX_STAGE);
         StageDispRefresh();
     }
 
@@ -136,9 +154,9 @@ public class MainMenuManager : MonoBehaviour {
 
     // ステージ決定ボタン押下後0.5秒後に遷移する
     private IEnumerator StageEnterCoroutine() {
-        if (PlayerPrefs.GetInt("CLEAR_STAGE_NO", 0) < stageNumber) {
-            PlayerPrefs.SetInt("CLEAR_STAGE_NO", stageNumber);
-        }
+        // 選択したステージ番号を保持
+        PlayerPrefs.SetInt("PLAY_STAGE_NO", stageNumber);
+        Debug.Log("Play Stage:"+stageNumber);
 
         yield return new WaitForSeconds(0.5f);
 
