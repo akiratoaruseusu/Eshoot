@@ -28,13 +28,16 @@ public class PlayerController : MonoBehaviour
     private float stopTime = 1f;
 
     [SerializeField]
+    [Tooltip("UI")]
+    private GameObject uiObj;
+    [SerializeField]
     [Tooltip("HPバー")]
     private Slider hpBar;
     [SerializeField]
     [Tooltip("装備時間バー")]
     private Slider eqTimeBar;
 
-    private float eqTime;             // 装備時間
+    private float eqTime = -1f;       // 装備時間
     private float eqTimeRemaining;    // 残り装備時間
 
     private Rigidbody rb;
@@ -45,6 +48,8 @@ public class PlayerController : MonoBehaviour
 
     private Gamepad gamepad;
     private bool isPressedA = false;
+
+    private UIController uiCon;
 
     // イベント
     public delegate void StageClear();
@@ -63,6 +68,9 @@ public class PlayerController : MonoBehaviour
 
         // プレイヤーの攻撃処理を取得
         playerAttack = gameObject.GetComponent<PlayerAttack>();
+
+        // UIコントローラ取得
+        uiCon = uiObj.GetComponent<UIController>();
 
         // プレイヤーのHPをHPバーに反映
         HpUpdate();
@@ -93,6 +101,9 @@ public class PlayerController : MonoBehaviour
         if (gamepad.buttonSouth.wasPressedThisFrame) {
             playerAttack.Capture(moveSpeed);
         }
+
+        // 装備時間経過
+        EqTimeLapse();
     }
 
     private void FixedUpdate() {
@@ -148,7 +159,10 @@ public class PlayerController : MonoBehaviour
 
     public void Capture(EnemyData data) {
         eqTime = eqTimeRemaining = data.eqTime;
-        EqTimeUpdate();
+        EqTimeUpdateDisp();
+
+        // ボタンを切り替える
+        uiCon.SetEequipment(true);
     }
 
     public void OnMove(InputAction.CallbackContext context) {
@@ -169,6 +183,29 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(movement, ForceMode.VelocityChange);
         }
     }
+
+    // 装備時間更新
+    private void EqTimeLapse(){
+        // 時間がセットされてないなら更新しない
+        if(0 >= eqTime) {
+            return;
+        }
+        eqTimeRemaining -= Time.deltaTime;
+        if(eqTimeRemaining < 0f){
+            eqTimeRemaining = 0f;
+        }
+
+        // 描画更新
+        EqTimeUpdateDisp();
+
+        // 時間終了
+        if(0 >= eqTimeRemaining){
+            eqTime = -1f;
+            // ボタンを切り替える
+            uiCon.SetEequipment(false);
+        }
+    }
+
 
     // 前進を停止する
     private void StopMoving() {
@@ -191,8 +228,8 @@ public class PlayerController : MonoBehaviour
     }
 
     // 装備時間バーを更新
-    public void EqTimeUpdate() {
+    public void EqTimeUpdateDisp() {
         eqTimeBar.value = (float)eqTimeRemaining / (float)eqTime;
-        eqTimeBar.GetComponentInChildren<Text>().text = "E " + eqTimeRemaining.ToString("F1") + "sec";
+        eqTimeBar.GetComponentInChildren<Text>().text = "E " + eqTimeRemaining.ToString("F1") + " sec";
     }
 }
