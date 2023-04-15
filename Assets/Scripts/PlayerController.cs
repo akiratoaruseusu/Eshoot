@@ -28,6 +28,10 @@ public class PlayerController : MonoBehaviour
     private float stopTime = 1f;
 
     [SerializeField]
+    [Tooltip("捕獲ボタンクールダウン(秒)")]
+    private float capCoolTime = 1f;
+
+    [SerializeField]
     [Tooltip("UI")]
     private GameObject uiObj;
     [SerializeField]
@@ -39,6 +43,7 @@ public class PlayerController : MonoBehaviour
 
     private float eqTime = -1f;       // 装備時間
     private float eqTimeRemaining;    // 残り装備時間
+    private float capCoolTimeRemaining = -1f; // 残り捕獲クールダウン時間
 
     private Rigidbody rb;
     private PlayerAttack playerAttack;
@@ -98,12 +103,16 @@ public class PlayerController : MonoBehaviour
         }
 
         // Bボタン押下判定
-        if (gamepad.buttonSouth.wasPressedThisFrame) {
+        if (gamepad.buttonSouth.wasPressedThisFrame && 0 >= capCoolTimeRemaining) {
+            capCoolTimeRemaining = capCoolTime;
             playerAttack.Capture(moveSpeed);
         }
 
         // 装備時間経過
         EqTimeLapse();
+
+        // 捕獲ボタンクールダウン
+        CapBtnTimeLapse();
     }
 
     private void FixedUpdate() {
@@ -206,6 +215,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 捕獲ボタン時間更新
+    private void CapBtnTimeLapse() {
+        // 時間がセットされてないなら更新しない
+        if (0 >= capCoolTimeRemaining) {
+            return;
+        }
+        capCoolTimeRemaining -= Time.deltaTime;
+    }
 
     // 前進を停止する
     private void StopMoving() {
